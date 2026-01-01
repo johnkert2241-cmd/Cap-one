@@ -1,6 +1,9 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+
 import 'bootstrap/dist/css/bootstrap.min.css';
+
+
 import './App.css';
 
 // UserInterface
@@ -10,13 +13,11 @@ import Contact from './components/Home/FooterContact'
 import About from './components/Home/AboutUs'
 
 // Users Profile
-
 import CusProfile from './pages/Users'
 
-
 // Authentication fom
-import Signup from './pages/Signupform'
-import Login from './pages/Loginform'
+import Signup from './Auth/Signup'
+import Login from './Auth/Login'
 
 // BusinessLogin  
 import Businesslogin from './Auth/BusinessLogin'
@@ -30,7 +31,7 @@ import Profile from './pages/Contractor/Profile'
 import Products from './pages/Contractor/Products'
 import Orders from './pages/Contractor/Orders'
 import Services from './pages/Contractor/Services'
-import Services2 from './pages/Contractor/Services2'
+import ServicesRequest from './pages/Contractor/ServicesRequest'
 
 // ADMIN Dashboard
 import AdminDashboard from './pages/Admin/Dashboard'
@@ -72,9 +73,9 @@ function App() {
           <Route path="Dashboard" element={<Dashboard />} />
           <Route path="Profile" element={<Profile />} />
           <Route path="Products" element={<Products />} />
-          <Route path="Services2" element={<Services2 />} />
           <Route path="Orders" element={<Orders />} />
           <Route path="Services" element={<Services />} />
+          <Route path="ServicesRequest" element={<ServicesRequest />} />
 
         </Route>
 
@@ -98,3 +99,5 @@ function App() {
 }
 
 export default App;
+
+

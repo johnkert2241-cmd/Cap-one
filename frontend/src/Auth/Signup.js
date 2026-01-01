@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
 import { ToastContainer, toast, Bounce } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-// Icons
-import { ImFacebook2 } from "react-icons/im";
+import logo from "../assets/images/logomain.png";
 import { SiGmail } from "react-icons/si";
+
 
 function Register() {
     const [formData, setFormData] = useState({
@@ -30,8 +29,6 @@ function Register() {
 
         if (!formData.fullname) {
             newErrors.fullname = "Full name is required";
-        } else if (formData.fullname.length < 6 || formData.fullname.length > 10) {
-            newErrors.fullname = "Full name must be 6–10 characters";
         }
 
         if (!formData.email) newErrors.email = "Email is required";
@@ -83,7 +80,7 @@ function Register() {
             if (!res.ok) {
                 // Special check kapag email duplicate
                 if (data.message && data.message.includes("Email already registered")) {
-                    setErrors({ email: data.message }); // para red border sa email
+                    setErrors({ email: data.message });
                 }
                 throw new Error(data.message || "Failed to register");
             }
@@ -100,11 +97,11 @@ function Register() {
     };
 
     return (
-        <div className="formmain pt-5">
-            <div className="formbox text-center justify-content-center align-items-center">
-                <div className="box pt-5">
-                    <p className="fonttext fs-1 pt-3">Sign up</p>
-                    <p className="signtext">Sign up for ARCooling PH</p>
+        <div className="formmain py-5">
+            <div className="formbox text-center ">
+                <div className="py-4">
+                    <img src={logo} alt="ARCoolingPh" className="mb-3" style={{ width: "150px" }} />
+                    <h4 className="py-2" style={{ color: "#13abb9" }}>Sign up for ARCooling PH</h4>
                     <div className="formloginInput">
                         <form onSubmit={handleRegister}>
                             <input
@@ -150,24 +147,20 @@ function Register() {
                                 className={errors.phone ? "input-error" : ""}
                             />
                             <button type="submit" className="formbutton">Signup</button>
+
                         </form>
 
                         {/* Social Login */}
                         <div className="SocialLogin pt-3">
-                            <div className="p-4">
-                                <span className="textDisabled pb-2 border-bottom">Or login with</span>
-                                <div className="socialIcon pt-4">
-                                    <Link to="#">
-                                        <span><ImFacebook2 size='25' color={'#385898'} /> Facebook</span>
-                                    </Link>
-                                    <Link to="#">
-                                        <span><SiGmail size='25' color={'#EA4335'} /> Gmail</span>
-                                    </Link>
-                                </div>
+                            <span className="textDisabled pb-2 border-bottom">Or login with</span>
+                            <div className="py-3 align-items-center">
+                                <button className="btn btn-light shadow-md">
+                                    <SiGmail size={20} color="#DB4437" />
+                                    <span className="ms-2">Sign in with Google</span>
+                                </button>
                             </div>
-
                             <div className="signupbutton">
-                                <p className="p-3">Already have an account? <Link to="/login">Log in</Link></p>
+                                <p>Already have an account? <Link to="/Login">Log in</Link></p>
                             </div>
                         </div>
                     </div>

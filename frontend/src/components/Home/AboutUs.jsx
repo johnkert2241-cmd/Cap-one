@@ -1,13 +1,13 @@
 import { FaFacebook } from "react-icons/fa";
 
-import technicianImg from "../../assets/images/office.png"; // <-- replace with your image path
+import technicianImg from "../../assets/images/office.png"; 
 
 const AboutUs = () => {
     return (
         <section className="about-section">
             <div className="about-container">
                 <div className="about-text">
-                    <h2>About Us</h2>
+                    <h1>About Us</h1>
                     <p>
                         Welcome to ARcoolingpH, your trusted partner for air conditioning and refrigeration needs.
                         We specialize in selling high-quality air conditioners and refrigerators that bring comfort

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, Outlet } from "react-router-dom";
 import { FaChevronDown, FaChevronRight } from "react-icons/fa";
-import { FaUserEdit } from "react-icons/fa";
 
 
 function ContractorDashboard() {
@@ -13,7 +12,7 @@ function ContractorDashboard() {
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const token = localStorage.getItem("token"); // once logged user
+                const token = localStorage.getItem("token"); 
                 const res = await axios.get("http://localhost:5000/business/profile", {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -28,34 +27,28 @@ function ContractorDashboard() {
         fetchProfile();
     }, []);
 
-
-    if (!contractor) return <h2>Loading...</h2>;
+    if (!contractor)
+        return (
+            <div className="text-center py-5">
+                    <span className="text-secondary fs-2">No data found Please try again...</span>
+            </div>
+        );
 
     const toggleCustomerMenu = () => {
         setIsCustomerOpen(!isCustomerOpen);
     };
+
     return (
         <div className="container-fluid">
+
             <div className="row vh-100 overflow-hidden">
+
                 {/* SIDEBAR for desktop */}
                 <div className="sidebar col-md-3 col-lg-2 d-none d-md-block">
-                    <div className="align-items-center d-flex flex-column mb-4">
-                        <div className="profile-img rounded-circle d-flex align-items-center justify-content-center"
-                            style={{
-                                width: "80px",
-                                height: "80px",
-                                backgroundColor: "#203a43",
-                                color: "white",
-                                fontSize: "35px",
-                                cursor: "pointer",
-                                boxShadow: "0 4px 8px rgba(0,0,0,0.3)"
-                            }}>
-                            <FaUserEdit />
-                        </div>
-                        <h5 className="py-2">{contractor.businessName}</h5>
-
+                    <div className="mb-4 text-center border-bottom">
+                        <label className="py-4 fw-bold fs-6">{contractor.businessName}</label>
                     </div>
-                    
+
                     <ul className="nav flex-column">
                         <li className="nav-item">
                             <Link className="nav-link" to="/Contractor">
@@ -73,12 +66,12 @@ function ContractorDashboard() {
                             <Link className="nav-link" to="Products">
                                 Products
                             </Link>
-                         </li>
+                        </li>
 
                         <li className="nav-item">
-                            <Link className="nav-link" to="Services2">
+                            <Link className="nav-link" to="Services">
                                 Services
-                            </Link> 
+                            </Link>
                         </li>
 
                         <li className="nav-item">
@@ -106,7 +99,7 @@ function ContractorDashboard() {
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link className="nav-link text-white" to="Services">
+                                        <Link className="nav-link text-white" to="ServicesRequest">
                                             -  Services
                                         </Link>
                                     </li>
@@ -153,12 +146,12 @@ function ContractorDashboard() {
                             </li>
                             <li className="nav-item">
                                 <Link className="nav-link text-light" to="Orders">
-                                    Customer Orders
+                                    Orders
                                 </Link>
                             </li>
                             <li className="nav-item">
                                 <Link className="nav-link text-light" to="Services">
-                                    Customer Services
+                                    Services
                                 </Link>
                             </li>
                         </ul>

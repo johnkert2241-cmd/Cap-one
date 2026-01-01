@@ -5,7 +5,10 @@ import crypto from "crypto";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 
+import fs from "fs";
 import auth from "../middleware/auth.js";
+import upload from "../uploads.js";
+
 
 const router = express.Router();
 
@@ -14,9 +17,10 @@ router.get("/profile", auth, (req, res) => {
 });
 
 // Signup Route
-router.post("/", async (req, res) => {
+router.post("/", upload.single("businessPermit"), async (req, res) => {
     try {
-        const { businessName, address, postalcode, fullname, email, phone, password } = req.body;
+
+        const { businessName, address, fullname, email, phone, password } = req.body;
 
         const existing = await Contractor.findOne({ email });
         if (existing) return res.status(400).json({ message: "Email already registered" });
@@ -27,14 +31,16 @@ router.post("/", async (req, res) => {
         const newBusiness = new Contractor({
             businessName,
             address,
-            postalcode,
             fullname,
             email,
             phone,
             password: hashedPassword,
             verificationToken,
             isApproved: false,
-            isVerified: false
+            isVerified: false,
+            businessPermit: req.file
+                ? `/uploads/${req.file.filename}`
+                : null,
         });
 
         await newBusiness.save();
@@ -51,11 +57,11 @@ router.post("/", async (req, res) => {
         const verifyUrl = `http://localhost:5000/business/verify/${verificationToken}`;
 
         await transporter.sendMail({
-            from: `"AircolingPH ADMIN"'<no-reply@aircolingph.com>'`,
+            from: `"AircolingPH ADMIN" <${process.env.EMAIL_USER}>`,
             to: email,
             subject: "Please verify your email",
             html: `
-        <h2>Hello ${businessName},</h2>
+        <h2>Hello, ${businessName}</h2>
         <p>Thanks for registering your business. Please click below to verify your email:</p>
         <a href="${verifyUrl}" 
            style="background:#3085d6; color:white; padding:10px 20px; text-decoration:none; border-radius:5px;">
@@ -103,7 +109,7 @@ router.post("/login", async (req, res) => {
         }
 
         if (!contractor.isVerified) {
-            return res.status(400).json({ message: "Please verify your email first." });
+            return res.status(400).json({ message: "Please verify your email first" });
         }
 
         if (!contractor.isApproved) {
@@ -138,32 +144,70 @@ router.post("/login", async (req, res) => {
     }
 });
 
-router.put("/profile", auth, async (req, res) => {
+router.put("/profile", auth, upload.single("profileImage"), async (req, res) => {
     try {
         const contractor = req.contractor;
         const { businessName, email, address, phone } = req.body;
 
-        // update fields
-        req.contractor.businessName = businessName || req.contractor.businessName;
-        req.contractor.email = email || req.contractor.email;
-        req.contractor.address = address || req.contractor.address;
-        req.contractor.phone = phone || req.contractor.phone;
+        if (businessName) contractor.businessName = businessName;
+        if (email) contractor.email = email;
+        if (address) contractor.address = address;
+        if (phone) contractor.phone = phone;
 
-        await req.contractor.save();
+        if (req.file) {
+            if (contractor.profileImage) {
+                const oldImage = contractor.profileImage.replace("/uploads/", "");
+                const oldPath = `uploads/${oldImage}`;
+
+                if (fs.existsSync(oldPath)) {
+                    fs.unlinkSync(oldPath);
+                }
+            }
+
+            contractor.profileImage = `/uploads/${req.file.filename}`;
+        }
+
+        await contractor.save();
 
         res.json({
             message: "Profile updated successfully",
-            contractor: {
-                businessName: req.contractor.businessName,
-                email: req.contractor.email,
-                address: req.contractor.address,
-                phone: req.contractor.phone,
-            },
+            profileImage: contractor.profileImage,
         });
+
     } catch (err) {
+        console.error("Update profile error:", err);
         res.status(500).json({ message: err.message });
     }
 });
+
+router.put("/profile/remove-image", auth, async (req, res) => {
+    try {
+        const contractor = req.contractor;
+
+        // Check if may existing image
+        if (contractor.profileImage) {
+            const oldImage = contractor.profileImage.replace("/uploads/", "");
+            const oldPath = `uploads/${oldImage}`;
+
+            // Delete from folder
+            if (fs.existsSync(oldPath)) {
+                fs.unlinkSync(oldPath);
+            }
+
+            // Remove from database
+            contractor.profileImage = null;
+            await contractor.save();
+        }
+
+        res.json({ message: "Profile image removed successfully" });
+
+    } catch (err) {
+        console.error("Image remove error:", err);
+        res.status(500).json({ message: "Server error" });
+    }
+});
+
+
 
 
 export default router;

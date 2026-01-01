@@ -9,8 +9,7 @@ import businessRoutes from "./routes/business.js";
 import productsRoutes from "./routes/products.js";
 import orderRoutes from "./routes/orders.js";
 import servicesRoutes from "./routes/services.js";
-import bookingRoutes from './routes/booking.js'
-
+import servicesRequestRoutes from "./routes/servicesRequest.js";
 
 import adminRoutes from './routes/admin.js'
 
@@ -21,16 +20,18 @@ const app = express();
 
 // Middleware
 app.use(cors());
-app.use(express.json()); 
+app.use(express.json({ limit: "10mb" }));
+app.use(express.json());
 // Routes
 app.use("/users", userRoutes);
 app.use("/auth", authRoutes);
 app.use("/business", businessRoutes);
-app.use("/booking", bookingRoutes);
+
 
 app.use("/products", productsRoutes);
 app.use("/orders", orderRoutes);
 app.use("/services", servicesRoutes);
+app.use("/servicesRequest", servicesRequestRoutes);
 
 app.use("/admin", adminRoutes);
 app.use("/uploads", express.static("uploads"));

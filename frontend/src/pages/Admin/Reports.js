@@ -25,7 +25,7 @@ function Reports() {
 
     return (
         <div className="reports-container">
-            <h3 className="reports-title "> Reports</h3>
+            <h3 className="reports-title py-4" style={{ color: "#0A5875" }}> Reports</h3>
 
             <table className="reports-table">
                 <thead>

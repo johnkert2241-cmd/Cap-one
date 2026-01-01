@@ -1,28 +1,29 @@
 import React from "react";
-import { FaUserEdit  } from "react-icons/fa";
+import { FaUserEdit } from "react-icons/fa";
 import { Link, Outlet } from "react-router-dom";
 import { RxDashboard } from "react-icons/rx";
-import { FaRegChartBar } from "react-icons/fa";
+import { FaSignOutAlt, FaRegChartBar } from "react-icons/fa";
 import { MdBusiness } from "react-icons/md";
 import { GiHamburgerMenu } from "react-icons/gi";
+import Swal from "sweetalert2";
 
 function DashboardMain() {
     return (
         <div className="d-flex flex-column flex-md-row">
             {/* ===== Sidebar for Desktop ===== */}
-            <div className="sidemin p-3">
+            <div className="sidemin p-3 position-relative d-none d-md-block">
                 <div className="align-items-center d-flex flex-column mb-4">
                     <div className="profile-img rounded-circle d-flex align-items-center justify-content-center"
                         style={{
                             width: "80px",
                             height: "80px",
-                            backgroundColor: "#203a43",
+                            backgroundColor: "#0A5875",
                             color: "white",
                             fontSize: "35px",
                             cursor: "pointer",
                             boxShadow: "0 4px 8px rgba(0,0,0,0.3)"
-                       }}>
-                        <FaUserEdit  />
+                        }}>
+                        <FaUserEdit />
                     </div>
                     <h5 className="mt-3 mb-0">John Don</h5>
                     <small className="text-light">Johndon@company.com</small>
@@ -42,7 +43,7 @@ function DashboardMain() {
                     </li>
                     <li className="nav-item mb-2">
                         <Link to="BusinessRegistered" className="nav-link text-white">
-                            <MdBusiness className="me-2" /> Registered Business
+                            <MdBusiness className="me-2" /> Business Registered
                         </Link>
                     </li>
                     <li className="nav-item mb-2">
@@ -50,7 +51,48 @@ function DashboardMain() {
                             <FaRegChartBar className="me-2" /> Reports
                         </Link>
                     </li>
+                    <li
+                        className="nav-item mb-2"
+                        style={{ cursor: "pointer" }}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            Swal.fire({
+                                title: "Log out?",
+                                text: "Are you sure you want to logout?",
+                                icon: "warning",
+                                showCancelButton: true,
+                                confirmButtonText: "Logout",
+                                cancelButtonText: "Cancel",
+                                reverseButtons: true,
+                                confirmButtonColor: "#d33",
+                                cancelButtonColor: "#3085d6",
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    Swal.fire({
+                                        title: "Logging out...",
+                                        text: "Please wait a moment",
+                                        allowOutsideClick: false,
+                                        didOpen: () => {
+                                            Swal.showLoading();
+                                        },
+                                    });
+
+                                    setTimeout(() => {
+                                        localStorage.removeItem("token");
+                                        window.location.href = "/BusinessLogin";
+                                    }, 1500);
+                                }
+                            });
+                        }}
+                    >
+                        <span className="nav-link text-danger d-flex align-items-center">
+                            <FaSignOutAlt className="me-2" />
+                            Logout
+                        </span>
+                    </li>
+
                 </ul>
+
             </div>
 
 
@@ -73,18 +115,18 @@ function DashboardMain() {
 
                         <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="hamburgerMenu">
                             <li>
-                                <Link to="/Admin" className="dropdown-item d-flex align-items-center">
-                                    <RxDashboard className="me-2" /> Dashboard
+                                <Link to="Admin" className="dropdown-item d-flex align-items-center">
+                                    Dashboard
                                 </Link>
                             </li>
                             <li>
-                                <Link to="RegisteredBusiness" className="dropdown-item d-flex align-items-center">
-                                    <MdBusiness className="me-2" /> Registered Business
+                                <Link to="BusinessRegistered" className="dropdown-item d-flex align-items-center">
+                                    Registered Business
                                 </Link>
                             </li>
                             <li>
                                 <Link to="Reports" className="dropdown-item d-flex align-items-center">
-                                    <FaRegChartBar className="me-2" /> Reports
+                                    Reports
                                 </Link>
                             </li>
                         </ul>

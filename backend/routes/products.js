@@ -6,10 +6,38 @@ import auth from "../middleware/auth.js";
 const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
 
+// POST add new product
+router.post("/add", auth, upload.single("image"), async (req, res) => {
+    try {
+        const { category, brand, type, details, price, } = req.body;
+        if (!req.file) throw new Error("Image required");
+
+        const product = new Product({
+            brand,
+            type,
+            details,
+            price,
+            category,
+            contractorId: req.contractor._id,
+            image: {
+                data: req.file.buffer.toString("base64"),
+                contentType: req.file.mimetype,
+            },
+        });
+
+        const saved = await product.save();
+        res.status(201).json(saved);
+    } catch (err) {
+        console.error(err);
+        res.status(400).json({ message: err.message });
+    }
+});
+
 // GET all products
 router.get("/product", auth, async (req, res) => {
     try {
-        const products = await Product.find({ contractorId: req.contractor._id });
+        const products = await Product.find({ contractorId: req.contractor._id })
+            .populate("contractorId", "address businessName");
 
         const formatted = products.map((p) => ({
             ...p._doc,
@@ -28,40 +56,16 @@ router.get("/product", auth, async (req, res) => {
 // GET PRODUCT PUBLISH
 router.get("/publish", async (req, res) => {
     try {
-        const products = await Product.find({ published: true });
-        res.json(products);
+        const publishedProducts = await Product.find({ published: true })
+            .populate("contractorId", "businessName address");;
+        res.json(publishedProducts);
     } catch (err) {
-        res.status(500).json({ message: "Failed to load published products" });
+        console.error("Fetch published products error:", err);
+        res.status(500).json({ message: "Failed to fetch published products" });
     }
 });
 
-// POST add new product
-router.post("/add", auth, upload.single("image"), async (req, res) => {
-    try {
-        const { category , brand, type, details, price, offerService, } = req.body;
-        if (!req.file) throw new Error("Image required");
 
-        const product = new Product({
-            brand,
-            type,
-            details,
-            price,
-            category,
-            offerService,
-            contractorId: req.contractor._id, // store the logged in contractor
-            image: {
-                data: req.file.buffer.toString("base64"),
-                contentType: req.file.mimetype,
-            },
-        });
-
-        const saved = await product.save();
-        res.status(201).json(saved);
-    } catch (err) {
-        console.error(err);
-        res.status(400).json({ message: err.message });
-    }
-});
 
 // PUT update product
 router.put("/:id", upload.single("image"), async (req, res) => {
@@ -78,7 +82,7 @@ router.put("/:id", upload.single("image"), async (req, res) => {
             details: req.body.details,
             price: Number(req.body.price),
             category: req.body.category,
-            
+
         };
         // Only update image if new file is uploaded
         if (req.file) {
@@ -126,14 +130,19 @@ router.delete("/:id", async (req, res) => {
 // publish product
 router.put("/:id/publish", async (req, res) => {
     try {
-        const product = await Product.findByIdAndUpdate(
-            req.params.id,
-            { published: true },
-            { new: true }
-        );
-        res.json(product);
+        const product = await Product.findById(req.params.id);
+        if (!product) return res.status(404).json({ message: "Product not found" });
+
+        product.published = !product.published;
+        await product.save();
+
+        res.json({
+            message: `Product ${product.published ? "published" : "unpublished"} successfully`,
+            product,
+        });
     } catch (err) {
-        res.status(500).json({ message: "Failed to publish product" });
+        console.error("Publish error:", err);
+        res.status(500).json({ message: "Failed to toggle publish" });
     }
 });
 

@@ -5,7 +5,6 @@ const Footer = () => {
     return (
         <footer className="footer p-5">
             <div className="footer-container">
-
                 {/* Email Section */}
                 <div className="footer-box">
                     <FaEnvelope className="footer-icon" />
@@ -22,7 +21,7 @@ const Footer = () => {
                         <h5>Call Us</h5>
                         <p>SMART: 0932-316-9713</p>
                         <p>DITO: 0991-925-7948</p>
-                        
+
                     </div>
                 </div>
 
@@ -33,8 +32,9 @@ const Footer = () => {
                         <h5>Address</h5>
                         <p>Bantan Street Bunawan, Davao City</p>
                     </div>
-                </div>       
+                </div>
             </div>
+       
         </footer>
     );
 };

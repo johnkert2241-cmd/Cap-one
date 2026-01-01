@@ -1,87 +1,117 @@
 import express from "express";
 import Service from "../models/Services.js";
-import Booking from "../models/Booking.js";
+import auth from "../middleware/auth.js";
 
 const router = express.Router();
 
-// Create service request
-router.post("/", async (req, res) => {
+//  CREATE SERVICE
+router.post("/", auth, async (req, res) => {
   try {
-
-    const newService = new Service(req.body);
-    await newService.save();
-
-
-    const userId = req.body.userId || req.body._id;
-    if (!userId) {
-      return res.status(400).json({ error: "Missing userId" });
-    }
-
-    const newBooking = new Booking({
-      userId: req.body.userId,
-      firstname: req.body.firstname,
-      lastname: req.body.lastname,
-      phone2: req.body.phone2,
-      address2: req.body.address2,
-      product: req.body.product,
-      services: req.body.services,
-      details: req.body.details,
-      date: req.body.date,
+    const newService = new Service({
+      ...req.body,
+      contractorId: req.contractor._id,
     });
-    await newBooking.save();
 
-    res.status(201).json({
-      message: "Service & Booking saved successfully",
-      service: newService,
-      booking: newBooking,
-    });
+    const savedService = await newService.save();
+    res.status(201).json(savedService);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: "Failed to save service" });
   }
 });
 
-// Get all services (filtered by firstname if provided)
-router.get("/", async (req, res) => {
+// GET ALL SERVICES
+router.get("/", auth, async (req, res) => {
   try {
-    const { firstname } = req.query;
-    const filter = firstname ? { firstname } : {};
-    const services = await Service.find(filter).sort({ createdAt: -1 });
+    const services = await Service.find({ contractorId: req.contractor._id })
+      .populate("contractorId", "address");
     res.json(services);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: "Failed to fetch services" });
   }
 });
 
-// Get single service
-router.get("/services/:id", async (req, res) => {
+//  GET SINGLE SERVICE
+router.get("/:id", async (req, res) => {
   try {
     const service = await Service.findById(req.params.id);
     if (!service) return res.status(404).json({ error: "Service not found" });
     res.json(service);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: err.message });
+    console.error("Error getting service:", err);
+    res.status(500).json({ error: "Failed to get service" });
   }
 });
 
-// Delete service
-router.delete("/:id", async (req, res) => {
+// UPDATE SERVICE
+router.put("/:id", auth, async (req, res) => {
   try {
-    // 1. Delete the service
-    const deletedService = await Service.findByIdAndDelete(req.params.id);
-    if (!deletedService) {
-      return res.status(404).json({ error: "Service not found" });
+    const service = await Service.findOne({
+      _id: req.params.id,
+      contractorId: req.contractor._id,
+    });
+
+    if (!service) {
+      return res.status(403).json({ error: "Not authorized" });
     }
 
-    // 2. Delete the booking that matches userId + details
-    await Booking.deleteMany({ serviceId: req.params.id });
+    Object.assign(service, req.body);
+    await service.save();
 
-    res.json({ message: "Service and related booking deleted" });
+    res.json(service);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: "Failed to update service" });
+  }
+});
+
+
+//  DELETE SERVICE
+router.delete("/:id", auth, async (req, res) => {
+  try {
+    const deleted = await Service.findOneAndDelete({
+      _id: req.params.id,
+      contractorId: req.contractor._id,
+    });
+
+    if (!deleted) {
+      return res.status(403).json({ error: "Not authorized" });
+    }
+
+    res.json({ message: "Service deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to delete service" });
+  }
+});
+
+// PUBLISH / UNPUBLISH SERVICE
+router.put("/:id/publish", auth, async (req, res) => {
+  const service = await Service.findOne({
+    _id: req.params.id,
+    contractorId: req.contractor._id,
+  });
+
+  if (!service) {
+    return res.status(403).json({ error: "Not authorized" });
+  }
+
+  service.published = !service.published;
+  await service.save();
+
+  res.json({
+    message: `Service ${service.published ? "published" : "unpublished"} successfully`,
+    service,
+  });
+});
+
+
+// Publish (for homepage)
+router.get("/publish/list", async (req, res) => {
+  try {
+    const publishedServices = await Service.find({ published: true })
+    .populate("contractorId", "address");
+    res.json(publishedServices);
+  } catch (err) {
+    console.error("Error fetching published services:", err);
+    res.status(500).json({ error: "Failed to fetch published services" });
   }
 });
 

@@ -1,29 +1,31 @@
 // server/routes/orders.js
 import express from "express";
+import auth from "../middleware/auth.js";
 import Order from "../models/Order.js";
 
 const router = express.Router();
 
 // Create a new order
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   try {
-    const order = new Order(req.body);
+    const order = new Order({
+      ...req.body,
+    });
+
     const savedOrder = await order.save();
-    res.json(savedOrder); // importante: ibalik yung bagong order
+    res.json(savedOrder);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 });
 
-
 // Get all orders 
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
   try {
-    const { userId } = req.query;
-    const filter = {};
-    if (userId) filter.userId = userId;
+    const orders = await Order.find({
+      contractorId: req.contractor._id,
+    }).sort({ createdAt: -1 });
 
-    const orders = await Order.find(filter).sort({ createdAt: -1 });
     res.json(orders);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -31,35 +33,51 @@ router.get("/", async (req, res) => {
 });
 
 // EDIT 
-router.put("/:id", async (req, res) => {
-  try {
-    const updatedOrder = await Order.findByIdAndUpdate(
-      req.params.id,
-      { $set: req.body },
-      { new: true }
-    );
+router.put("/:id", auth, async (req, res) => {
+  const order = await Order.findOne({
+    _id: req.params.id,
+    contractorId: req.contractor._id,
+  });
 
-    if (!updatedOrder) {
-      return res.status(404).json({ error: "Order not found" });
-    }
-
-    res.json(updatedOrder);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+  if (!order) {
+    return res.status(403).json({ message: "Unauthorized" });
   }
+
+  Object.assign(order, req.body);
+  await order.save();
+  res.json(order);
 });
+
 
 // Delete order
-router.delete("/:id", async (req, res) => {
-  try {
-    const deleted = await Order.findByIdAndDelete(req.params.id);
-    if (!deleted) {
-      return res.status(404).json({ error: "Order not found" });
-    }
-    res.json({ message: "Order deleted successfully" });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+router.delete("/:id", auth, async (req, res) => {
+  const order = await Order.findOneAndDelete({
+    _id: req.params.id,
+    contractorId: req.contractor._id,
+  });
+
+  if (!order) {
+    return res.status(403).json({ message: "Unauthorized" });
   }
+
+  res.json({ message: "Order deleted successfully" });
 });
+
+router.put("/:id/status", auth, async (req, res) => {
+  const order = await Order.findOne({
+    _id: req.params.id,
+    contractorId: req.contractor._id,
+  });
+
+  if (!order) {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  order.status = req.body.status;
+  await order.save();
+
+  res.json(order);
+});
+
 
 export default router;

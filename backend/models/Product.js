@@ -11,7 +11,6 @@ const productSchema = new mongoose.Schema({
     type: String,
     details: String,
     price: Number,
-    offerService: String,
     image: { data: String, contentType: String, },
     published: { type: Boolean, default: false },
 }, { timestamps: true });

@@ -46,17 +46,19 @@ const BusinessRequest = () => {
 
     return (
         <div className="business-container">
-            <h3 className="fw-bold">Business Request</h3>
-
+            <div className="py-4 d-flex justify-content-between align-items-center">
+                <h3 className="fw-bold " style={{ color: "#0A5875" }}>Business Request</h3>
+                <input type="text" className="form-control w-25" placeholder="Search..."/>
+            </div>
             <table className="table-request">
                 <thead>
                     <tr>
                         <th>ID</th>
                         <th>Business Name</th>
                         <th>Email</th>
+                        <th>Phone</th>
                         <th>Date</th>
                         <th>Actions</th>
-                        <th>View</th>
                     </tr>
                 </thead>
                 <tbody className="Admin-data">
@@ -65,23 +67,28 @@ const BusinessRequest = () => {
                             <td>{index + 1}</td>
                             <td>{item.businessName}</td>
                             <td>{item.email}</td>
+                            <td>{item.phone}</td>
                             <td>{new Date(item.createdAt).toLocaleDateString()}</td>
                             <td>
                                 <button
-                                    className="btn-approve bg-success text-light"
+                                    className="btn btn-success text-light"
                                     onClick={() => handleApprove(item._id)}
                                 >
                                     Approve
                                 </button>
                                 <button
-                                    className="btn-reject bg-danger text-light"
+                                    className="btn btn-danger text-light"
+                                   
                                     onClick={() => handleReject(item._id)}
                                 >
                                     Reject
                                 </button>
-                            </td>
-                            <td className="text-center">
-                                <button className="btn-view">View</button>
+                                <button
+                                    className="btn text-center"
+                                    style={{ background: "#0A5875", color: "#ffffff" }}
+                                >
+                                    View
+                                </button>
                             </td>
                         </tr>
                     ))}

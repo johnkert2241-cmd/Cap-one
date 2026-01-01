@@ -20,7 +20,7 @@ router.put("/:id", upload.single("profileImage"), async (req, res) => {
     }
 
     const updatedUser = await User.findByIdAndUpdate(
-      req.params.id, // depends on front end
+      req.params.id, 
       { $set: updateData },
       { new: true }
     );
@@ -33,6 +33,23 @@ router.put("/:id", upload.single("profileImage"), async (req, res) => {
     res.json(updatedUser);
   } catch (err) {
     console.error("Update error:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.get("/:id", async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).select(
+      "fullname phone address email"
+    );
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.json(user);
+  } catch (err) {
+    console.error("Fetch user error:", err);
     res.status(500).json({ error: err.message });
   }
 });

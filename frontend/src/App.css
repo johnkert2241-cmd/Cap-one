@@ -4,11 +4,9 @@
     padding: 0;
 }
 
-
 /* Home/ */
 .linkAccountext .textLink {
     color: #f3f3f3 !important;
-
     transition: 0.2s ease-in-out;
 }
 
@@ -17,13 +15,8 @@
     text-decoration: none;
 }
 
-.linkAccountext .textLink:hover {
-    text-decoration: underline;
-}
-
 .linkAccountext {
     background: #0a5875;
-    padding: 28px 0px;
 }
 
 .mainpage h1,
@@ -88,29 +81,31 @@ h5 {
     position: absolute;
     padding: 6px;
     min-width: 100px;
-    background: #2b2b2b;
-    box-shadow: 1px 1px 5px #000;
+    background: #f5f5f5;
     border-radius: 8px;
     z-index: 1;
     margin-top: 10px;
 }
 
-.dropdown-content .buttonProfile {
-    font-size: 16px;
-    width: 100%;
-    color: #fff;
+.dropdown-content button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     background: none;
+    border: none;
+    color: white;
+    padding: 8px 12px;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: 0.3s;
 }
 
-.dropdown-content .logout-btn {
-    font-size: 16px;
-    text-decoration: none;
-    border: none;
-    background: none;
-    width: 100%;
-    text-align: center;
-    cursor: pointer;
+.dropdown-content button:hover {
+    background: #d2d2d2;
 }
+
 
 .Navmain {
     display: flex;
@@ -142,9 +137,8 @@ h5 {
 }
 
 .Navmain li a:hover {
-    color: #00d2e6;
+    color: #13abb9;
 }
-
 
 .Navmain .linkLogin {
     color: #fff;
@@ -166,8 +160,8 @@ h5 {
 }
 
 .userprofile {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     object-fit: cover;
     transition: 0.3s;
@@ -200,24 +194,7 @@ h5 {
     z-index: 1000;
 }
 
-.dropdown-content button {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: none;
-    border: none;
-    color: white;
-    padding: 8px 12px;
-    width: 100%;
-    text-align: left;
-    cursor: pointer;
-    border-radius: 6px;
-    transition: 0.3s;
-}
 
-.dropdown-content button:hover {
-    background: #555;
-}
 
 
 /* Home-Background */
@@ -260,6 +237,7 @@ h5 {
     background-color: #eaf6ff;
     /* light blue bg */
     padding: 60px 20px;
+    border-radius: 8px;
 }
 
 .about-container {
@@ -267,7 +245,7 @@ h5 {
     align-items: center;
     justify-content: space-between;
     gap: 40px;
-    max-width: 1200px;
+    width: 70%;
     margin: 0 auto;
     flex-wrap: wrap;
     /* responsive */
@@ -278,9 +256,8 @@ h5 {
     min-width: 300px;
 }
 
-.about-text h2 {
+.about-text h1 {
     color: #0077b6;
-    font-size: 2rem;
     margin-bottom: 20px;
 }
 
@@ -621,7 +598,6 @@ h5 {
 /* FOOTER */
 .footer {
     background: #0a5875;
-    /* same as Bootstrap primary */
     color: #fff;
     padding: 2rem 1rem;
 }
@@ -643,6 +619,7 @@ h5 {
 }
 
 .footer-box h5 {
+    color: #ffd700;
     margin: 0 0 0.5rem 0;
     font-weight: bold;
 }
@@ -657,6 +634,10 @@ h5 {
     flex-shrink: 0;
     color: #ffd700;
     /* gold accent */
+}
+
+.copyright {
+    background: #0a5875;
 }
 
 /* Center text on small screens */
@@ -677,16 +658,6 @@ h5 {
 
 /* formBusiness */
 
-/* default input style */
-.BusinessInput {
-    width: 100%;
-    padding: 10px;
-    margin: 8px 0;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    outline: none;
-    transition: 0.3s;
-}
 
 /* when error */
 .BusinessInput.error {
@@ -760,43 +731,16 @@ h5 {
     padding: 0px 2px;
 }
 
-.SignformBusiness .Signtext {
-    color: #13abb9;
-}
-
-.SignformBusiness .iconText .icon {
-    padding: 15px 0px;
-}
-
-.SignformBusiness form {
-    padding: 100px 0px
-}
-
-.formInput input {
-    padding: 13px 15px;
-    width: 90%;
-    margin: 15px 0px;
-    outline: none;
-    border: 1px solid #3a8f8a;
-    border-radius: 10px;
-}
-
-.formInput input:focus {
-    border: 1px solid #13abb9;
-}
-
-.formInput p {
-    color: #13abb9;
-}
-
 .ButtonSign {
     width: 100%;
     padding: 14px 0px;
+
     outline: line;
     border: none;
     border-radius: 8px;
-    background: #13abb9;
+    background: #0d5297;
     transition: 0.2s ease-in-out;
+
 }
 
 .errorInput {
@@ -853,26 +797,11 @@ h5 {
 
 
 /* Sign/login form */
-.formbox .fonttext {
-    color: #13abb9;
-}
-
-.formmain {
-    margin: 0px;
-    padding: 0px;
-}
-
-.formmain .formbox img {
-    width: 18%;
-}
-
 .formbox {
-    margin: 50px 20%;
-    box-shadow: 1px 1px 15px #e0e0e0;
-}
-
-.formbox .signtext {
-    color: #626262;
+    background: #ffffff;
+    margin: 0px 30%;
+    border-radius: 8px;
+    box-shadow: 1px 1px 15px #9e9e9e;
 }
 
 /*  Input*/
@@ -884,8 +813,9 @@ h5 {
     padding: 0 15%
 }
 
-.formmain .formloginInput {
-    justify-content: center;
+.formmain {
+    min-height: 100vh;
+    background-color: #034f84;
 }
 
 .formmain .formloginInput input {
@@ -893,7 +823,7 @@ h5 {
     margin: 5px 0px;
     padding: 12px 15px;
     border-radius: 8px;
-    border: 1px solid #2d2e2f;
+    border: 1px solid #a4a5a7;
     outline: none;
 }
 
@@ -917,9 +847,10 @@ h5 {
 }
 
 /* SocialMed*/
-.SocialLogin .textDisabled {
-    color: #626262;
-    padding: 0px 28%;
+.textDisabled {
+    color: #888;
+    ;
+    font-size: 15px;
 }
 
 .SocialLogin a {
@@ -931,35 +862,12 @@ h5 {
     text-decoration: underline;
 }
 
-.SocialLogin .socialIcon a {
-    margin: 0px 30px !important;
-    padding: 15px 35px !important;
-    text-decoration: none;
-    color: #626262 !important;
-    transition: 0.3s ease-in-out !important;
-}
-
-.SocialLogin .socialIcon a:hover {
-    background: #f8f8f8;
-    box-shadow: 10px 10px 5px #c5c5c5;
-}
-
-.SocialLogin .socialIcon img {
-    width: 5%;
-    margin-right: 15px;
-}
-
-.SocialLogin {
-    padding: 50px 0px;
-    margin: 0px;
-}
-
 /* Dashbaord admin */
 
 .sidemin {
     width: 260px;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
-    background: linear-gradient(180deg, #1a1c2c 0%, #2c3e50 50%, #3b5998 100%);
+    background: #0A5875;
 }
 
 .dashboard-container {
@@ -967,7 +875,6 @@ h5 {
     padding: 20px;
     background: #fafaff;
 }
-
 
 .sidemin ul li {
     padding-top: 1rem;
@@ -1036,41 +943,39 @@ h5 {
 
 /* Colors */
 .revenue {
-    background: linear-gradient(135deg, #1a1c2c 0%, #2c3e50 50%, #3b5998 100%);
+    background: #0A5875;
 }
 
 .clients {
-    background: linear-gradient(135deg, #1a1c2c 0%, #2c3e50 50%, #3b5998 100%);
+    background: #0A5875;
 }
 
 .pending {
-    background: linear-gradient(135deg, #1a1c2c 0%, #2c3e50 50%, #3b5998 100%);
+    background: #0A5875;
 }
 
 .reports {
-    background: linear-gradient(135deg, #1a1c2c 0%, #2c3e50 50%, #3b5998 100%);
+    background: #0A5875;
 }
 
 .chart-container {
-    background: linear-gradient(135deg, #1a1c2c 0%, #2c3e50 50%, #3b5998 100%);
+    background: #0A5875;
 }
 
 .recent-bookings {
-    background: linear-gradient(135deg, #1a1c2c 0%, #2c3e50 50%, #3b5998 100%);
+    background: #0A5875;
 }
 
 .recent-bookings table,
 th,
 tr {
-    color: #fff;
+    color: #f8f8f8;
     text-align: center;
 }
 
 .recent-bookings td {
-    padding: 15px;
-    border-bottom: 1px solid #fff;
+    padding: 17px;
 }
-
 
 
 /* Business Request*/
@@ -1078,13 +983,6 @@ tr {
 .business-container {
     padding: 20px;
     min-height: 100vh;
-}
-
-.business-container h3 {
-    font-size: 1.8rem;
-    font-weight: 700;
-    margin-bottom: 20px;
-    color: #2c3e50;
 }
 
 .table-request {
@@ -1096,12 +994,8 @@ tr {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.table-request h3 {
-    color: #306295;
-}
-
 .table-request thead {
-    background: #306295;
+    background: #0A5875;
     color: #fff;
 }
 
@@ -1112,7 +1006,7 @@ tr {
 }
 
 .table-request td {
-    color: #333;
+    color: #0A5875;
     padding: 20px 16px;
     font-size: 15px;
     text-align: center;
@@ -1139,43 +1033,6 @@ button:hover {
     color: white;
 }
 
-.approve {
-    background: #57b05a;
-    color: white;
-}
-
-.reject {
-    background: #f44336;
-    color: white;
-}
-
-.view {
-    background: #2196f3;
-    color: white;
-}
-
-.navi svg {
-    cursor: pointer;
-}
-
-.btn-reject:hover {
-    background: #c82333;
-}
-
-.btn-view {
-    background: #007bff;
-    color: #fff;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.btn-view:hover {
-    background: #0056b3;
-}
-
 /* Reports table */
 .reports-container {
     padding: 20px;
@@ -1198,12 +1055,8 @@ button:hover {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.reports-container h3 {
-    color: #306295;
-}
-
 .reports-table thead {
-    background: #306295;
+    background: #0A5875;
     color: #fff;
 }
 
@@ -1214,7 +1067,7 @@ button:hover {
 }
 
 .reports-table td {
-    color: #333;
+    color: #0A5875;
     padding: 20px 16px;
     font-size: 15px;
     text-align: center;
@@ -1223,18 +1076,28 @@ button:hover {
 
 /*Business Registered  */
 
+.BusinessContent {
+    background: #034f84;
+}
+
+.formField {
+    padding: 15px;
+    margin-top: 8%;
+    border-radius: 8px;
+    background: #ffffff;
+}
+
+.formField span:hover {
+    text-decoration: underline;
+}
+
 .Registered-container {
     padding: 20px;
     min-height: 100vh;
 }
 
-.Registered-container h3 {
-    color: #306295;
-    margin-bottom: 20px;
-}
-
 .table-register thead {
-    background: #306295;
+    background: #0A5875;
     color: #fff;
 }
 
@@ -1255,7 +1118,7 @@ button:hover {
 }
 
 .table-register td {
-    color: #333;
+    color: #0A5875;
     padding: 20px 16px;
     font-size: 15px;
     text-align: center;
@@ -1287,8 +1150,8 @@ button:hover {
 .dashboard {
     padding: 20px;
     border-radius: 8px;
-    height: calc(100vh - 120px); 
-    overflow-y: auto; 
+    height: calc(100vh - 120px);
+    overflow-y: auto;
     overflow-x: hidden;
 }
 
@@ -1321,37 +1184,21 @@ button:hover {
 .card h4 {
     font-size: 16px;
     font-weight: 600;
-    color: #007bff;
+    color: #0A5875;
     margin-bottom: 10px;
 }
 
 .card h2 {
     font-size: 28px;
     font-weight: bold;
-    color: #3b5998;
+    color: #0A5875;
     margin: 5px 0;
 }
 
 .card p {
     font-size: 14px;
-    margin-top: 5px;
 }
 
-.card .positive {
-    color: #16a34a;
-    /* green */
-    font-weight: 600;
-}
-
-.card .negative {
-    color: #dc2626;
-    /* red */
-    font-weight: 600;
-}
-
-.card.wide {
-    grid-column: span 2;
-}
 
 @media (max-width: 768px) {
     .card.wide {
@@ -1373,13 +1220,27 @@ button:hover {
     padding-bottom: 40px;
 }
 
+.contractortable {
+    border-radius: 10px;
+}
+
+.contractortable tr {
+    border-radius: 10px;
+}
+
+.contractortable th {
+    background: #0A5875;
+    padding: 15px 0px;
+    color: #fff;
+}
+
 
 /* Contracor sidebar */
 
 .sidebar {
     width: 250px;
     height: 100vh;
-    background-color: #66B1FC;
+    background-color: #0A5875;
     color: white;
     padding: 20px;
     display: flex;
@@ -1398,7 +1259,7 @@ button:hover {
 }
 
 .sidebar li a {
-    font-size: 16px;
+    font-size: 17px;
     border-radius: 8px;
     border-left: 1px 2px;
     padding: 10px;
@@ -1421,47 +1282,29 @@ button:hover {
     font-weight: 500;
 }
 
+.sidebarUser .icon:hover {
+    transform: scale(1.1);
+    color: #1c445b;
+}
+
+.sidebarUser .icon.active {
+    color: #1c445b;
+}
+
 /* USERS */
 
-.carduser {
-    background: #f9fafc;
-
-}
-
-/* Container */
-.profile-container {
+.sidebarList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
     display: flex;
-    font-family: Arial, sans-serif;
-    background: #f8f9fb;
-    min-height: 100vh;
-    position: relative;
+    gap: 10px;
 }
 
-/* Sidebar */
-.sidebarUser {
-    width: 70px;
-    background: #fff;
-    padding: 20px 10px;
-    border-right: 1px solid #e0e0e0;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    align-items: center;
-    flex-shrink: 0;
-    transition: transform 0.3s ease-in-out;
-}
-
-.sidebarUser .icon {
-    font-size: 22px;
-    color: #503333;
+.sidebarList li {
     cursor: pointer;
-    transition: color 0.3s;
 }
 
-.sidebarUser .icon.active,
-.sidebarUser .icon:hover {
-    color: #2563eb;
-}
 
 /* Close icon for mobile */
 .close-icon {
@@ -1486,10 +1329,11 @@ button:hover {
 
 /* Main Content */
 
-
 .main-contentuser {
     flex: 1;
     padding: 30px;
+    height: 100vh;
+    overflow-y: auto;
     position: relative;
 }
 
@@ -1664,17 +1508,12 @@ button:hover {
 }
 
 /* Footer Links */
-.login-footer {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 1.5rem;
-    font-size: 0.85rem;
-}
 
 .login-footer a {
     color: #94a3b8;
     text-decoration: none;
     transition: color 0.3s;
+    font-size: 0.85rem;
 }
 
 .login-footer a:hover {
@@ -1716,40 +1555,62 @@ button:hover {
 
 .custom-table {
     width: 100%;
-    border-collapse: collapse;
     margin-top: 10px;
+    border-collapse: collapse;
 }
 
-.custom-table th,
 .custom-table td {
-    border: 1px solid #e0e0e0;
+    color: #0f172a;
     padding: 10px;
-    text-align: left;
 }
 
 .custom-table th {
-    background: #f4f6f9;
+    padding: 10px;
     font-weight: bold;
+    background: rgb(10, 88, 117);
 }
 
 .custom-table tr:hover {
-    background: #f9fafc;
-}
-
-.Order th {
-    background: skyblue;
-}
-
-.Order td {
-
-    color: #111827;
-}
-
-.Booking th {
-    background: skyblue;
+    background: #e3e3e4;
 }
 
 /* SERVICES STYLING */
+
+.productsmodal {
+    color: #0A5875;
+    background: none;
+    border: 1px solid #0A5875;
+    transition: 0.3s ease-in-out;
+}
+
+.productsmodal:hover {
+    background: #0A5875;
+    color: #fff;
+}
+
+.edit {
+    border: 1px solid #0A5875;
+    background: none;
+    color: #0A5875;
+}
+
+.edit:hover{
+    background: #0A5875;
+    color: #fff;
+}
+
+.delete {
+    border: 1px solid #DC143C;
+    background: none;
+    color: #DC143C;
+}
+
+.delete:hover{
+    background: #DC143C;
+    color: #fff;
+}
+
+
 
 .custom-modal-overlay {
     position: fixed;
@@ -1849,6 +1710,7 @@ button:hover {
 
 /* BUSSINESS FORM */
 
+
 /* Background */
 .login-container {
     min-height: 100vh;
@@ -1858,7 +1720,6 @@ button:hover {
     background: linear-gradient(135deg, #0f172a, #1e293b, #000);
 }
 
-/* Card */
 .login-card {
     background: #1e293b;
     padding: 2.5rem;
@@ -1870,7 +1731,6 @@ button:hover {
     border: 1px solid #334155;
 }
 
-/* Title & Subtitle */
 .login-title {
     font-size: 1.8rem;
     font-weight: bold;
@@ -1884,7 +1744,6 @@ button:hover {
     margin-bottom: 2rem;
 }
 
-/* Input fields */
 .input-group {
     margin-bottom: 1.2rem;
 }
@@ -1921,4 +1780,278 @@ button:hover {
 
 .login-btn:hover {
     background: #1d4ed8;
+}
+
+/* SERVICES 2 */
+
+.title {
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.add-btn {
+    padding: 10px 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 10px;
+}
+
+.service-form {
+    max-width: 900px;
+    border-radius: 16px;
+    background-color: #ffffff;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #334155;
+}
+
+.preview-img {
+    max-height: 180px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    margin-top: 8px;
+}
+
+/* Published Service Card */
+
+.card-image {
+    width: 50%;
+    height: 180px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 6px;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.tag {
+    background-color: #f1f5f9;
+    border: 1px solid #d1d5db;
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-size: 0.8rem;
+    color: #333;
+}
+
+.service-img {
+    width: 100%;
+    height: 230px;
+    object-fit: cover;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .preview-img {
+        max-width: 90%;
+    }
+}
+
+.profile-card {
+    background-color: #fff;
+    border-radius: 1rem;
+}
+
+.profile-image:hover {
+    opacity: 0.9;
+    transition: 0.3s;
+}
+
+.status-badge {
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    display: inline-block;
+    animation: fadeSlide 0.3s ease-in-out;
+}
+
+
+/* Customer orders */
+
+.Order tr {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.Order td {
+    color: #483D8B
+}
+
+.Service tr {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.Service td {
+    color: #483D8B
+}
+
+/* Colors */
+/* Orders */
+.status-badge.processing {
+    background-color: #e7f5ff;
+    color: #026aa7;
+}
+
+.status-badge.order-confirmed {
+    background-color: #e7f5ff;
+    color: #026aa7;
+}
+
+.status-badge.ready-to-ship {
+    background-color: #e7f5ff;
+    color: #026aa7;
+}
+
+.status-badge.in-transit {
+    background-color: #e7f5ff;
+    color: #026aa7;
+}
+
+.status-badge.delivered {
+    background-color: #f6ffed;
+    color: #389e0d;
+}
+
+
+/* Booking */
+.status-badge.pending {
+    background-color: #e7f5ff;
+    color: #026aa7;
+}
+
+.status-badge.approved {
+    background-color: #f6ffed;
+    color: #237804;
+}
+
+.status-badge.disapproved {
+    background-color: #fff1f0;
+    color: #a8071a;
+}
+
+/* Animation */
+@keyframes fadeSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.carduser {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.card-img-fixed {
+    width: 100%;
+    height: 250px;
+    display: block;
+    margin: 0 auto;
+}
+
+.bghov {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* sliding background */
+.bghov::before {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #0A5875, #306295);
+    transition: top 0.4s ease;
+    z-index: 0;
+}
+
+.bghov:hover::before {
+    top: 0;
+}
+
+.bghov:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 136, 186, 0.272);
+}
+
+/* keep content on top */
+.bghov>* {
+    position: relative;
+    z-index: 1;
+    transition: color 0.3s ease;
+}
+
+/* TEXT turns white */
+.bghov:hover h4,
+.bghov:hover h2 {
+    color: #fff;
+}
+
+/* ICON turns white */
+.card-icon {
+    color: #0A5875;
+    transition: color 0.3s ease;
+}
+
+.bghov:hover .card-icon {
+    color: #fff;
+}
+
+
+/* end */
+
+.card-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+}
+
+
+.carduser:hover {
+    transform: translateY(-8px);
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+
+}
+
+.service-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+
+}
+
+
+.ligntext {
+    color: #fff;
+    transition: 0.3s ease-in-out;
+}
+
+.ligntext:hover {
+    color: #f57224;
+}
+
+.dropdown-item {
+    font-weight: 600;
+    background: #0A5875;
+    margin: 15px 0;
+    color: #6c6c6c;
+}
+
+
+.dropdown-item:hover {
+    color: #0a5875;
+    text-decoration: underline;
 }

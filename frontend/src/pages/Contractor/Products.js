@@ -4,25 +4,32 @@ import Swal from "sweetalert2";
 import axios from "axios";
 
 function Products() {
+
   const [activeTab, setActiveTab] = useState("Aircon");
   const [editValues, setEditValues] = useState({});
   const [airconProducts, setAirconProducts] = useState([])
   const [refrigeratorProducts, setRefrigeratorProducts] = useState([])
   const [editingProduct, setEditingProduct] = useState(null);
-  const [showPublishConfirmation, setShowPublishConfirmation] = useState(false);
-  const [productToPublish, setProductToPublish] = useState(null);
 
   const [newProduct, setNewProduct] = useState({
     brand: "",
     type: "",
     details: "",
     price: "",
+    address: "",
     image: null,
     category: "Aircon",
-    offerService: "",
   });
 
   const products = activeTab === "Aircon" ? airconProducts : refrigeratorProducts;
+
+  useEffect(() => {
+    setNewProduct((prev) => ({
+      ...prev,
+      category: activeTab,
+    }));
+  }, [activeTab]);
+
 
   // Fetch products mula sa backend
   const fetchProducts = async () => {
@@ -42,12 +49,11 @@ function Products() {
       console.error("Failed to fetch products:", err);
     }
   };
-  // Fetch products pag component mounted
+
   useEffect(() => {
     fetchProducts();
   }, []);
 
-  // Handle input changes
   const handleInputChange = (e) => {
     setNewProduct({ ...newProduct, [e.target.name]: e.target.value });
   };
@@ -61,9 +67,8 @@ function Products() {
   // Add product
   const handleAddProduct = async () => {
     if (!newProduct.category.trim() || !newProduct.brand.trim() ||
-      !newProduct.type.trim() || !newProduct.offerService.trim() ||
-      !newProduct.details.trim() || !newProduct.price.toString().trim() ||
-      !newProduct.image) {
+      !newProduct.type.trim() || !newProduct.details.trim()
+      || !newProduct.price.toString().trim() || !newProduct.image) {
       Swal.fire({
         icon: "warning",
         title: "Missing Fields",
@@ -79,9 +84,8 @@ function Products() {
       formData.append("type", newProduct.type);
       formData.append("details", newProduct.details);
       formData.append("price", Number(newProduct.price) || 0);
-      formData.append("offerService", newProduct.offerService);
       formData.append("image", newProduct.image);
-      
+
       const contractorId = localStorage.getItem("contractorId");
       formData.append("contractorId", contractorId);
 
@@ -115,16 +119,25 @@ function Products() {
         title: "Success!",
         text: "Product has been added successfully.",
       }).then(() => {
+
+        // Reset form
+        setNewProduct({
+          category: activeTab,
+          brand: "",
+          type: "",
+          details: "",
+          price: "",
+          image: null,
+        });
+
         const modalEl = document.getElementById("addProductModal");
         const modal = Modal.getOrCreateInstance(modalEl);
         modal.hide();
+
         document.body.classList.remove("modal-open");
         const backdrop = document.querySelector(".modal-backdrop");
         if (backdrop) backdrop.remove();
       });
-
-      // Reset form
-      setNewProduct({ category: activeTab, brand: "", type: "", details: "", price: "", offerService: "", image: null, });
 
       fetchProducts();
 
@@ -170,12 +183,11 @@ function Products() {
 
       Swal.fire({
         icon: "success",
-        title: "Updated Successfully",
+        title: "<span style='color:#198754;'>Updated Successfully</span>",
         text: "The product has been updated!",
-        showConfirmButton: false,
-        timer: 1500
       });
 
+      setEditingProduct();
     } catch (err) {
       console.error(err);
       Swal.fire({
@@ -185,8 +197,6 @@ function Products() {
       });
     }
   };
-
-
 
   // Handle delete
   const handleDelete = async (id) => {
@@ -205,8 +215,6 @@ function Products() {
           Swal.fire({
             icon: "success",
             title: "Product has been deleted!",
-            showConfirmButton: false,
-            timer: 1500
           });
 
           // agad tanggalin sa state
@@ -224,56 +232,35 @@ function Products() {
     });
   };
 
-  // Handle publish
-  const confirmPublish = (product) => {
-    setProductToPublish(product);
-    setShowPublishConfirmation(true);
-  };
-
-  const handlePublish = async () => {
-    if (!productToPublish) return;
-    try {
-      await axios.put(`http://localhost:5000/products/${productToPublish._id}/publish`, { published: true });
-      Swal.fire({ icon: "success", title: "Published!", text: "Product is now visible to users." });
-      fetchProducts(); // refresh from backend
-    } catch (err) {
-      console.error(err);
-      Swal.fire({ icon: "error", title: "Failed!", text: "Could not publish product." });
-    } finally {
-      setShowPublishConfirmation(false);
-      setProductToPublish(null);
-    }
-  };
-
-  const handleCancelPublish = () => {
-    setShowPublishConfirmation(false);
-    setProductToPublish(null);
-  };
-
-
   return (
+
     <div className="container-fluid py-4">
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="fw-bold text-primary">Products</h2>
+      <div className="d-flex align-items-center mb-4 border-bottom">
+        <h2 className="fw-bold" style={{ color: "#0A5875" }}>Products</h2>
+        {/* Tabs */}
+
+        <div className="ms-auto">
+          <ul className="nav nav-tabs mb-4">
+            <li className="nav-item">
+              <button className={`nav-link fw-semibold  ${activeTab === "Aircon" ? "active" : ""}`} onClick={() => setActiveTab("Aircon")}>Aircon</button>
+            </li>
+            <li className="nav-item">
+              <button className={`nav-link fw-semibold ${activeTab === "Refrigerator" ? "active" : ""}`} onClick={() => setActiveTab("Refrigerator")}>Refrigerator</button>
+            </li>
+          </ul>
+        </div>
       </div>
 
-      {/* Tabs */}
-      <ul className="nav nav-tabs mb-4">
-        <li className="nav-item">
-          <button className={`nav-link fw-semibold ${activeTab === "Aircon" ? "active" : ""}`} onClick={() => setActiveTab("Aircon")}>Aircon</button>
-        </li>
-        <li className="nav-item">
-          <button className={`nav-link fw-semibold ${activeTab === "Refrigerator" ? "active" : ""}`} onClick={() => setActiveTab("Refrigerator")}>Refrigerator</button>
-        </li>
-      </ul>
-
       {/* Products Grid */}
-      <div className="row">
+      <div className="row py-3 overflow-auto" style={{ maxHeight: "82vh", }}>
         {products.map((product) => (
           <div className="col-md-6 mb-4" key={product._id}>
-            <div className="card shadow-lg border-0 h-100 rounded-3 overflow-hidden">
+            <div className="card shadow border-0 h-100 rounded-3 overflow-hidden">
+              <h5 className="card-title fw-bold uppercase" style={{ color: "#0A5875" }}>
+                {product.contractorId?.businessName}
+              </h5>
               <div className="row g-0">
-                <div className="col-md-5 d-flex align-items-center justify-content-center bg-light">
+                <div className="col-md-5 d-flex align-items-center justify-content-center">
                   {product.image?.data ? (
                     <img
                       src={`data:${product.image.contentType};base64,${product.image.data}`}
@@ -317,29 +304,55 @@ function Products() {
                           value={editValues.price}
                           onChange={handleEditChange} />
 
-                        <button className="btn btn-success btn-sm me-2"
+                        <button className="btn me-2" style={{ background: "#0A5875", color: "#fff" }}
                           onClick={() => handleSave(product._id, editValues)}>Save</button>
-                        <button className="btn btn-secondary btn-sm"
+                        <button className="btn btn-secondary"
                           onClick={() => setEditingProduct(null)}>Cancel</button>
                       </>
                     ) : (
                       <>
-                        <h5 className="card-title fw-bold text-dark">{product.brand}</h5>
-                        <p className="fw-semibold text-secondary mb-1">{product.type}</p>
+                        <h5 className="card-title fw-bold uppercase" style={{ color: "#0A5875" }}>{product.brand}</h5>
+                        <p className="mb-1 uppercase">{product.type}</p>
                         <p className="card-text small text-muted">{product.details}</p>
-                        <p className="text-success fw-bold fs-5">₱ {(product.price).toLocaleString()}</p>
+                        <p className="fw-bold fs-5" style={{ color: "#0A5875" }}>₱ {(product.price).toLocaleString()}</p>
                         <div className="d-flex justify-content-between">
                           <div>
-                            <button className="btn btn-sm btn-outline-warning me-2 shadow-sm"
+                            <button className="edit me-2"
                               onClick={() => handleEdit(product)}>Edit</button>
-                            <button className="btn btn-sm btn-outline-danger shadow-sm"
+                            <button className="delete"
                               onClick={() => handleDelete(product._id)}>Delete</button>
                           </div>
                           <div>
-                            {!product.published && (
-                              <button className="btn btn-sm btn-success shadow-sm ms-2"
-                                onClick={() => confirmPublish(product)}>Publish</button>
-                            )}
+                            <button
+                              className={`btn btn-md ${product.published ? "btn-danger" : "btn-success"} text-white shadow-sm ms-2`}
+                              onClick={async () => {
+                                try {
+                                  const res = await fetch(`http://localhost:5000/products/${product._id}/publish`, {
+                                    method: "PUT",
+                                  });
+                                  const data = await res.json();
+                                  if (!res.ok) throw new Error(data.message || "Failed to toggle publish");
+
+                                  Swal.fire({
+                                    icon: "success",
+                                    title: data.message,
+                                    showConfirmButton: false,
+                                    timer: 1500,
+                                  });
+
+                                  fetchProducts();
+                                } catch (err) {
+                                  console.error("Publish error:", err);
+                                  Swal.fire({
+                                    icon: "error",
+                                    title: "Failed",
+                                    text: "Could not update publish status",
+                                  });
+                                }
+                              }}
+                            >
+                              {product.published ? "Unpublish" : "Publish"}
+                            </button>
                           </div>
                         </div>
                       </>
@@ -353,8 +366,14 @@ function Products() {
 
         {/* Add Product Card */}
         <div className="col-md-6 mb-4">
-          <div className="card shadow-lg border-0 h-100 d-flex align-items-center justify-content-center bg-light rounded-3">
-            <button className="btn btn-outline-secondary btn-lg px-4 py-3 shadow-sm" data-bs-toggle="modal" data-bs-target="#addProductModal">+ Add {activeTab}</button>
+          <div className="card border-0 shadow p-3 mb-5 bg-body rounded h-100 d-flex align-items-center justify-content-center rounded-3">
+            <button
+              className="fs-4 py-2 productsmodal"
+              data-bs-toggle="modal"
+              data-bs-target="#addProductModal"
+            >
+              + Add {activeTab}
+            </button>
           </div>
         </div>
       </div>
@@ -363,46 +382,36 @@ function Products() {
       <div className="modal fade" id="addProductModal" tabIndex="-1" aria-hidden="true">
         <div className="modal-dialog modal-lg modal-dialog-centered">
           <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title fw-bold">Add New Product</h5>
-              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div className="modal-header" style={{ background: "#0A5875", color: "#fff" }}>
+              <label className="modal-title fs-4">Add New Product</label>
+              <button className="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">
               <div className="mb-3">
                 <label className="form-label">Category</label>
-                <select name="category" className="form-select" value={newProduct.category} onChange={handleInputChange}>
-                  <option value="Aircon">Aircon</option>
-                  <option value="Refrigerator">Refrigerator</option>
-                </select>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={activeTab}
+                  disabled
+                />
               </div>
+
               <div className="mb-3">
                 <label className="form-label">Brand</label>
-                <input type="text" name="brand" className="form-control" value={newProduct.brand} onChange={handleInputChange} />
+                <input type="text" name="brand" className="form-control" onChange={handleInputChange} />
               </div>
               <div className="mb-3">
                 <label className="form-label">Type</label>
-                <input type="text" name="type" className="form-control" value={newProduct.type} onChange={handleInputChange} />
+                <input type="text" name="type" className="form-control" onChange={handleInputChange} />
               </div>
               <div className="mb-3">
                 <label className="form-label">Details</label>
-                <textarea name="details" className="form-control" rows="3" value={newProduct.details} onChange={handleInputChange}></textarea>
+                <textarea name="details" className="form-control" rows="3" onChange={handleInputChange}></textarea>
               </div>
               <div className="mb-3">
                 <label className="form-label">Price</label>
-                <input type="number" name="price" className="form-control" value={newProduct.price} onChange={handleInputChange} />
-              </div>
-              <div className="mb-3">
-                <label className="form-label">Do you offer a service?</label>
-                <select
-                  name="offerService"
-                  className="form-select"
-                  value={newProduct.offerService || ""}
-                  onChange={handleInputChange}
-                >
-                  <option value="">Select...</option>
-                  <option value="Yes">Yes</option>
-                  <option value="No">No</option>
-                </select>
+                <input type="number" name="price" className="form-control" onChange={handleInputChange} />
               </div>
               <div className="mb-3">
                 <label className="form-label">Upload Image</label>
@@ -419,30 +428,11 @@ function Products() {
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" className="btn btn-primary" onClick={handleAddProduct}>Save</button>
+              <button type="button" className="btn" style={{ background: "#0A5875", color: "#fff" }} onClick={handleAddProduct}>Add Product</button>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Publish Confirmation Modal */}
-      {showPublishConfirmation && (
-        <div className="modal fade show d-block" tabIndex="-1" aria-hidden="true" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Confirm Publish</h5>
-                <button type="button" className="btn-close" onClick={handleCancelPublish}></button>
-              </div>
-              <div className="modal-body">Are you sure you want to publish this product?</div>
-              <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" onClick={handleCancelPublish}>Cancel</button>
-                <button type="button" className="btn btn-primary" onClick={handlePublish}>Publish</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
